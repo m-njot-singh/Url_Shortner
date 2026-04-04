@@ -21,6 +21,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api/urls")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:5173")
 public class UrlMappingController {
     private UrlMappingService urlMappingService;
     private UserService userService;
@@ -59,10 +60,10 @@ public class UrlMappingController {
     @GetMapping("/totalClick")
     @PreAuthorize("hasRole('USER')")
     public ResponseEntity<Map<LocalDate, Long>> getTotalClickByDate(Principal principal, @RequestParam("startDate") String startDate, @RequestParam("endDate") String endDate){
-        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
+//        DateTimeFormatter formatter = DateTimeFormatter.ISO_LOCAL_DATE_TIME;
         User user = userService.findByUsername(principal.getName());
-        LocalDate start = LocalDate.parse(startDate, formatter);
-        LocalDate end = LocalDate.parse(endDate, formatter);
+        LocalDate start = LocalDate.parse(startDate);
+        LocalDate end = LocalDate.parse(endDate);
         Map<LocalDate, Long> totalClicks=urlMappingService.getTotalClicksByUserAndDate(user, start, end);
         return ResponseEntity.ok(totalClicks);
 
