@@ -5,8 +5,9 @@ import com.url.shortener.dtos.RegisterRequest;
 import com.url.shortener.models.User;
 import com.url.shortener.service.UserService;
 import lombok.AllArgsConstructor;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -31,7 +32,13 @@ public class AuthController {
         user.setEmail(request.getEmail());
         user.setRole("ROLE_USER");
 
-        userService.RegisterUser(user);
-        return ResponseEntity.ok("User Registered Successfully");
+        try {
+            userService.RegisterUser(user);
+            return ResponseEntity.ok("User Registered Successfully");
+        } catch (IllegalArgumentException exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(exception.getMessage());
+        } catch (DataIntegrityViolationException exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Username or email already exists");
+        }
     }
 }

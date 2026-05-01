@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import Graph from './Graph'
 import { dummyData } from '../../dummyData/data'
 import { useStoreContext } from '../../contextApi/ContextApi'
@@ -11,9 +11,16 @@ import Loader from '../Loader'
 
 const DashboardLayout = () => {
     // const refetch = false;
-    const { token } = useStoreContext();
+    const { token, openCreateModal, setOpenCreateModal } = useStoreContext();
     const navigate = useNavigate();
     const [shortenPopUp, setShortenPopUp] = useState(false);
+
+    useEffect(() => {
+      if (openCreateModal) {
+        setShortenPopUp(true);
+        setOpenCreateModal(false);
+      }
+    }, [openCreateModal, setOpenCreateModal]);
 
     // console.log(useFetchTotalClicks(token, onError));
 

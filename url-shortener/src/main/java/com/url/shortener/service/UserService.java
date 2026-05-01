@@ -1,13 +1,11 @@
 package com.url.shortener.service;
 
 import com.url.shortener.dtos.LoginRequest;
-import com.url.shortener.dtos.RegisterRequest;
 import com.url.shortener.models.User;
 import com.url.shortener.repository.UserRepository;
 import com.url.shortener.security.jwt.JwtAuthenticationResponse;
 import com.url.shortener.security.jwt.JwtUtils;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -15,7 +13,6 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
 
 @Service
 @AllArgsConstructor
@@ -37,6 +34,13 @@ public class UserService {
     }
 
     public User RegisterUser(User user){
+        if (userRepository.existsByUsername(user.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new IllegalArgumentException("Email already exists");
+        }
+
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         return userRepository.save(user);
     }
@@ -47,4 +51,3 @@ public class UserService {
         );
     }
 }
-

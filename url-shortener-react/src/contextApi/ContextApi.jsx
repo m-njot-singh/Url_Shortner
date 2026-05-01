@@ -8,10 +8,13 @@ export const ContextProvider = ({ children }) => {
         : null;
 
     const [token, setToken] = useState(getToken);
+    const [openCreateModal, setOpenCreateModal] = useState(false);
 
     const sendData = {
         token,
         setToken,
+        openCreateModal,
+        setOpenCreateModal,
     };
 
     return <ContextApi.Provider value={sendData}>{children}</ContextApi.Provider>

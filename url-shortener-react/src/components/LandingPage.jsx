@@ -10,11 +10,24 @@ let desc =
 
 const LandingPage = () => {
   const navigate = useNavigate();
-  const { token } = useStoreContext();
+  const { token, setOpenCreateModal } = useStoreContext();
   console.log("TOKEN FROM LANDING PAGE: " + token);
 
   const dashBoardNavigateHandler = () => {
+    if (token) {
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
+  };
 
+  const createNewLinkHandler = () => {
+    if (token) {
+      setOpenCreateModal(true);
+      navigate("/dashboard");
+    } else {
+      navigate("/login");
+    }
   };
   return (
     <div className="min-h-[calc(100vh-64px)]  lg:px-14 sm:px-8 px-4">
@@ -60,7 +73,7 @@ const LandingPage = () => {
               }}
               viewport={{ once: true }}
               transition={{ duration: 0.8 }}
-              onClick={dashBoardNavigateHandler}
+              onClick={createNewLinkHandler}
               className="border-btnColor border w-40 text-btnColor rounded-md  py-2 "
             >
               Create Short Link
